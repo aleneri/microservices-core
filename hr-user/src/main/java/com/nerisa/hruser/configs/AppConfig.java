@@ -1,4 +1,4 @@
-package com.nerisa.hruser.config;
+package com.nerisa.hruser.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
