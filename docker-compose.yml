@@ -1,0 +1,109 @@
+version: "3.4"
+services:
+  hr-worker-pg12:
+    image: library/postgres:12-alpine
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      POSTGRES_PASSWORD: 1234567
+      POSTGRES_DB: db_hr_worker
+    ports:
+    - "5432:5432"
+    networks:
+      - hr-net
+    volumes:
+      - ./database/worker.sql:/docker-entrypoint-initdb.d/worker.sql
+
+  hr-user-pg12:
+    image: library/postgres:12-alpine
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      POSTGRES_PASSWORD: 1234567
+      POSTGRES_DB: db_hr_user
+    ports:
+      - "5433:5432"
+    networks:
+      - hr-net
+    volumes:
+      - ./database/user.sql:/docker-entrypoint-initdb.d/user.sql
+
+  hr-eureka-server:
+    image: alenerisp/hr-eureka-server:v1
+    restart: always
+    working_dir: /app
+    environment:
+      TZ: America/Sao_Paulo
+    ports:
+      - "8761:8761"
+    command: mvn spring-boot:run
+    networks:
+      - hr-net
+
+  hr-config-server:
+    image: alenerisp/hr-config-server:v1
+    restart: always
+    working_dir: /app
+    environment:
+      TZ: America/Sao_Paulo
+    ports:
+      - "8888:8888"
+    command: mvn spring-boot:run
+    networks:
+      - hr-net
+
+  hr-api-gateway-zuul:
+    image: alenerisp/hr-api-gateway-zuul:v2
+    restart: always
+    working_dir: /app
+    environment:
+      TZ: America/Sao_Paulo
+    ports:
+      - "8765:8765"
+    command: mvn spring-boot:run
+    networks:
+      - hr-net
+
+  hr-worker:
+    image: alenerisp/hr-worker:v1
+    restart: always
+    working_dir: /app
+    environment:
+      TZ: America/Sao_Paulo
+    command: mvn spring-boot:run
+    networks:
+      - hr-net
+
+  hr-user:
+    image: alenerisp/hr-user:v1
+    restart: always
+    working_dir: /app
+    environment:
+      TZ: America/Sao_Paulo
+    command: mvn spring-boot:run
+    networks:
+      - hr-net
+
+  hr-payroll:
+    image: alenerisp/hr-payroll:v1
+    restart: always
+    working_dir: /app
+    environment:
+      TZ: America/Sao_Paulo
+    command: mvn spring-boot:run
+    networks:
+      - hr-net
+
+  hr-oauth:
+    image: alenerisp/hr-oauth:v2
+    restart: always
+    working_dir: /app
+    environment:
+      TZ: America/Sao_Paulo
+    command: mvn spring-boot:run
+    networks:
+      - hr-net
+
+networks:
+  hr-net:
+    driver: bridge

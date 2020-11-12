@@ -1,4 +1,4 @@
-package com.nerisa.hruser.reources;
+package com.nerisa.hruser.resources;
 
 import com.nerisa.hruser.entities.User;
 import com.nerisa.hruser.repositories.UserRepository;
