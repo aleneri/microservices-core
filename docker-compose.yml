@@ -53,7 +53,7 @@ services:
       - hr-net
 
   hr-api-gateway-zuul:
-    image: alenerisp/hr-api-gateway-zuul:v1
+    image: alenerisp/hr-api-gateway-zuul:v2
     restart: always
     working_dir: /app
     environment:
